@@ -85,7 +85,7 @@ pip install PyMySQL==1.1.1
 Edit the Airflow configuration file to connect to the MySQL database. Change the value of `sql_alchemy_conn` in `airflow.cfg`:
 
 ```cfg
-sql_alchemy_conn = mysql+mysqldb://wsl_root:password@my_ip:3306/airflow_db
+sql_alchemy_conn = mysql+pymysql://wsl_root:password@my_ip/extenso_config
 ```
 
 Replace `my_ip` with your WSL IP address.
