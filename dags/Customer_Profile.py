@@ -96,7 +96,7 @@ default_args = {
     'email_on_retry': False,
 }
 dag = DAG(
-    'table_creation',
+    'customer_profile_creation_dag',
     default_args=default_args,
     description='A dag for customer_profile',
     schedule_interval='@once',
