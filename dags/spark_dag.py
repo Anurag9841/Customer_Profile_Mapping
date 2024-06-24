@@ -39,7 +39,3 @@ spark_task = PythonOperator(
     python_callable = func,
     dag = dag
 )
-
-
-
-

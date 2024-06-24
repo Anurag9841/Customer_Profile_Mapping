@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.mysql_operator import MySqlOperator
 from hdfs import InsecureClient
 
 default_args = {
@@ -18,12 +19,26 @@ dag = DAG(
     catchup=False,
 )
 
-dump_command= """
-mysqldump -u wsl_root -ppassword -h 172.25.0.1 store_procedure products > /home/user/airflow/output_file/output_sql_dump/dumped_file.sql
+# dump_command= """
+# mysqldump -u wsl_root -panurag123 -h 172.25.0.1 store_procedure products > /home/user/airflow/output_file/output_sql_dump/dumped_file.sql
+# """
+
+mysql_query = """
+    CREATE TABLE employee1(
+        name varchar(255)
+    );
 """
 
-table_insertion = BashOperator(
-    task_id='table_creation',
-    bash_command=dump_command,
+mysql_task = MySqlOperator(
+    task_id='mysql_task',
+    mysql_conn_id='MySQLID',  # Connection ID as configured in Airflow
+    sql=mysql_query,
     dag=dag,
 )
+
+# mysql_dump = BashOperator(
+#     task_id = 'mysql_dump',
+#     bash_command = dump_command,
+#     dag = dag
+# )
+
