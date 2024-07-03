@@ -1,0 +1,37 @@
+payer_account_id,product_name,2023-02-01,2023-03-01,2023-04-01,2023-05-01,2023-06-01,used_map
+34,Send Money,1,1,1,1,0,11110
+26,Electricity,0,1,1,1,0,01110
+471,Send Money,1,1,1,1,0,11110
+56,Electricity,1,1,1,1,0,11110
+531,Ncell Data Via Bank,1,1,1,1,0,11110
+34,NT Prepaid Topup,1,1,1,1,0,11110
+531,NT Topup via Bank,1,1,1,1,0,11110
+222,Prepaid Topup,0,1,1,1,0,01110
+471,Prepaid Topup,1,1,1,1,0,11110
+531,TOPUP VIA BANK DIRECT,0,1,1,1,0,01110
+34,Ncell Topup,1,1,1,1,0,11110
+34,Electricity,1,1,1,1,0,11110
+471,NT Prepaid Topup,1,1,1,1,0,11110
+471,Electricity,0,1,1,1,0,01110
+56,Send Money,1,1,1,1,0,11110
+56,Prepaid Topup,1,1,1,1,0,11110
+538,Prepaid Topup,0,0,0,1,0,00010
+222,NT Prepaid Topup,0,1,1,1,0,01110
+26,Send Money,1,1,1,1,0,11110
+531,Ncell Topup via Bank,0,1,1,1,0,01110
+1056,Ncell Topup,0,1,0,1,0,01010
+26,NT Prepaid Topup,1,1,1,1,0,11110
+34,Prepaid Topup,1,1,1,1,0,11110
+56,Ncell Topup,1,1,1,1,0,11110
+1056,Electricity,0,1,0,1,0,01010
+1001,Ncell Topup,0,0,0,0,1,00001
+531,Wordlink Topup via Bank,1,1,1,1,0,11110
+538,NT Prepaid Topup,0,0,0,1,0,00010
+1176,Ncell Topup,0,1,0,0,0,01000
+471,Ncell Topup,1,1,1,1,0,11110
+1056,Prepaid Topup,0,1,1,1,0,01110
+56,NT Prepaid Topup,1,1,1,1,0,11110
+222,Ncell Topup,0,0,1,1,0,00110
+26,Prepaid Topup,1,1,1,1,0,11110
+1056,NT Prepaid Topup,0,1,1,1,0,01110
+26,Ncell Topup,1,1,1,1,0,11110

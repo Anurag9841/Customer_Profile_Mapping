@@ -19,26 +19,26 @@ dag = DAG(
     catchup=False,
 )
 
-# dump_command= """
-# mysqldump -u wsl_root -panurag123 -h 172.25.0.1 store_procedure products > /home/user/airflow/output_file/output_sql_dump/dumped_file.sql
-# """
-
-mysql_query = """
-    CREATE TABLE employee1(
-        name varchar(255)
-    );
+dump_command= """
+mysqldump -u wsl_root -panurag123 -h 172.25.0.1 client_rw employee3 > /home/user/airflow/output_file/output_sql_dump/dumped_file1.sql
 """
 
-mysql_task = MySqlOperator(
-    task_id='mysql_task',
-    mysql_conn_id='MySQLID',  # Connection ID as configured in Airflow
-    sql=mysql_query,
-    dag=dag,
-)
+# mysql_query = """
+#     CREATE TABLE employee3(
+#         name varchar(255)
+#     );
+# """
 
-# mysql_dump = BashOperator(
-#     task_id = 'mysql_dump',
-#     bash_command = dump_command,
-#     dag = dag
+# mysql_task = MySqlOperator(
+#     task_id='mysql_task',
+#     mysql_conn_id='MySQLID',  # Connection ID as configured in Airflow
+#     sql=mysql_query,
+#     dag=dag,
 # )
+
+mysql_dump = BashOperator(
+    task_id = 'mysql_dump',
+    bash_command = dump_command,
+    dag = dag
+)
 

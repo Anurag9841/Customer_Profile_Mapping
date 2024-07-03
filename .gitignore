@@ -1,4 +1,5 @@
 airflow-env/
 logs/
 python_files/
+__pycache__/
 

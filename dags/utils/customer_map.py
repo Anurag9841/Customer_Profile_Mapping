@@ -16,13 +16,15 @@ def mapping():
             "driver": "com.mysql.cj.jdbc.Driver"
         }
     # Function to fetch configuration from a JSON file
-    def config(table):
-        last_transaction_date = table.select(max("last_modified_date")).collect()[0][0]
+    def config(start_date,last_date):
+        if isinstance(start_date, str) and isinstance(last_date, str):
+            start_dates = datetime.strptime(start_date, '%Y-%m-%d')
+            last_dates = datetime.strptime(last_date, '%Y-%m-%d')
         config_data = {
-        # "last_transaction_date" : last_date,
-        "start_transaction_date" : last_transaction_date.strftime('%Y-%m-%d')
+            "start_transaction_date": (start_dates + relativedelta(months=2)).strftime('%Y-%m-%d'),
+            "last_transaction_date" : (last_dates + relativedelta(months=2)).strftime('%Y-%m-%d')
         }
-        with open("config.json", "w") as json_file:
+        with open("./input_file/config_cm.json", "w") as json_file:
             json.dump(config_data, json_file)
 
     # Function to write configuration to a JSON file
@@ -103,3 +105,4 @@ def mapping():
     product_category_map = table("product_category_map",start_date,last_date)
     rw_transaction_data = table("rw_transaction_data",start_date,last_date)
     map(product_category_map,rw_transaction_data)
+    config(start_date,last_date)

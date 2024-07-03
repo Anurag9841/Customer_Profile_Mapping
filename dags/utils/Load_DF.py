@@ -18,7 +18,6 @@ def load_df_from_dir(dir_path='/home/user/airflow/input_file/input_files_entity_
         layouts.append(df)
     return layouts
 
-
 def char_to_digit(char):
     if char.isdigit():
         return int(char)
