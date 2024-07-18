@@ -39,7 +39,8 @@ def mapping():
     def table(table_name, start_date, end_date):
         df = spark.read.jdbc(url=url, table=table_name, properties=properties)
         if table_name == "rw_transaction_data":
-            df = df.filter((df.last_modified_date >= to_date(lit(start_date))) & (df.last_modified_date <= to_date(lit(end_date))))
+            df = df.filter((df.last_modified_date >= to_date(lit(start_date))))
+            # & (df.last_modified_date <= to_date(lit(end_date))
         return df
     
     # Function to determine most used products
@@ -105,4 +106,4 @@ def mapping():
     product_category_map = table("product_category_map",start_date,last_date)
     rw_transaction_data = table("rw_transaction_data",start_date,last_date)
     map(product_category_map,rw_transaction_data)
-    config(start_date,last_date)
+    # config(start_date,last_date)
