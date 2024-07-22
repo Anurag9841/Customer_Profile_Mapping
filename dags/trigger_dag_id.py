@@ -6,9 +6,8 @@ from datetime import datetime
 default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 3, 14),
-    # 'email_on_failure': False,
-    # 'email_on_retry': False,
 }
+
 dag = DAG(
     'trigger_onrun_dag',
     default_args=default_args,
@@ -28,11 +27,13 @@ trigger = TriggerDagRunOperator(
     trigger_dag_id= "sql_sensor_dag",
     dag = dag
 )
+
 download = PythonOperator(
     task_id = "download",
     python_callable= downloading,
     dag = dag
 )
+
 completion = PythonOperator(
     task_id = "completion",
     python_callable=completion,
