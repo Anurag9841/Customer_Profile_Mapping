@@ -1,3 +1,7 @@
+'''
+Author: Anurag Karki
+Date: 2024/07/22
+'''
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine,inspect
@@ -7,13 +11,33 @@ from sklearn.metrics.pairwise import cosine_similarity
 from datetime import datetime
 from utils.Load_DF_sql import load_df_from_dir,sanitize,string_to_digits,char_to_digit
 from Levenshtein import distance
+from dotenv import load_dotenv
+
+load_dotenv()
+
+SQL_USERNAME = os.getenv('SQL_USERNAME')
+SQL_PASSWORD = os.getenv('SQL_PASSWORD')
+SQL_HOST = os.getenv('SQL_HOST')
+SQL_PORT = os.getenv('SQL_PORT')
+ROOT_PATH = os.getenv('ROOT_PATH')
+DATABASE_NAME = os.getenv('DATABASE_NAME')
 
 def final_entity_matching():
+
     layouts = load_df_from_dir()
-    engine = create_engine("mysql+pymysql://wsl_root:anurag123@172.25.0.1:3306/entity_matching")
+    engine = create_engine(f'mysql+pymysql://{SQL_USERNAME}:{SQL_PASSWORD}@{SQL_HOST}:{SQL_PORT}/{DATABASE_NAME}')
     for layout in layouts:
         layout['last_modified_date'] = datetime.now()
+
     def create_soup(df, df_, soup, soup_name):
+        """
+        Concatenate specified columns into a single 'soup' column with lowercase text.
+        
+        :param df: Original dataframe to update
+        :param df_: Dataframe with raw data
+        :param soup: List of columns to concatenate
+        :param soup_name: Name of the new 'soup' column
+        """
         df[soup_name] = df_[soup].apply(lambda x: ' '.join(x.values.astype(str)).lower(), axis=1)
 
     layout_copies = [layout.copy() for layout in layouts]
@@ -24,6 +48,15 @@ def final_entity_matching():
         create_soup(layout, layout_copy, soup, "soup")
 
     def combine_layouts(A, B, metric='cosine', threshold=0.8):
+        """
+        Combine two dataframes based on similarity metrics.
+        
+        :param A: First dataframe
+        :param B: Second dataframe
+        :param metric: Similarity metric ('cosine' or others)
+        :param threshold: Similarity threshold for merging
+        :return: Combined dataframe
+        """
         def calculate_similarity(A, B, metric):
             if metric == 'cosine':
                 tfidf = TfidfVectorizer(stop_words='english')
@@ -61,6 +94,11 @@ def final_entity_matching():
         return merge_data(A, B, idx_row, similarity_mask)
 
     def save_layouts():
+        """
+        Combine all layouts and save the final result to a database.
+        
+        :return: SQL result of saving the final dataframe
+        """
         final_df = layouts[0]
 
         for df in layouts[1:]:
