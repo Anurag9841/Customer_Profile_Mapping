@@ -1,109 +1,57 @@
-# Customer Profile Creation and Mapping
+# Entity Matching
 
-## About the Project
+## Getting Started 
 
-This project involves creating and mapping customer profiles using Apache Airflow and PySpark.
 
-### Customer Profile Creation
-
-The project fetches `Rw_transaction_data` and `Product_Category_map` from the database and joins these datasets to create an aggregation table. This table is updated incrementally as new data arrives, ensuring that the customer profiles are always up to date.
-
-### Customer Mapping
-
-Using the same `Rw_transaction_data` and `Product_Category_map` datasets, the project creates a map of customer product usage on a monthly basis. For instance, if a customer bought a product in month 1, month 2, month 3, and month 5 but not in month 4, the mapping would be `11101`. This mapping is updated manually as new data is received.
-
-## Getting Started with Airflow with PySpark
-
-## Contents
-
-- [1. Installing Java](#1-installing-java)
-- [2. Setting up the Virtual Environment](#2-setting-up-the-virtual-environment)
-- [3. Making Connection to MySQL Running in Windows from WSL](#3-making-connection-to-mysql-running-in-windows-from-wsl)
-    - [3.1 MySQL Client in WSL](#31-mysql-client-in-wsl)
-    - [3.2 Find IPv4 Address of WSL](#32-find-ipv4-address-of-wsl)
-    - [3.3 Making New User in MySQL to Make a Call from WSL](#33-making-new-user-in-mysql-to-make-a-call-from-wsl)
-    - [3.4 Install PyMySQL](#34-install-pymysql)
-    - [3.5 Initializing Database](#35-initializing-database)
-- [4. Install Apache Airflow within the Virtual Environment](#4-install-apache-airflow-within-the-virtual-environment)
-- [5. Initializing the Database](#5-initializing-the-database)
-- [6. Create an Airflow User with Administrative Privileges](#6-create-an-airflow-user-with-administrative-privileges)
-- [7. Running Airflow Webserver and Scheduler](#7-running-airflow-webserver-and-scheduler)
-
-### 1. Installing Java
-
-Install Java to run Apache Airflow with PySpark:
-
-```sh
-sudo apt-get install openjdk-11-jdk
-
-nano ~/.bashrc
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-export PATH=$JAVA_HOME/bin:$PATH
-source ~/.bashrc
-```
-
-### 2. Setting up the Virtual Environment
+### 1. Setting up the Virtual Environment
 
 Set up a virtual environment to manage dependencies:
 
 ```sh
-pip install virtualenv
-virtualenv airflow-env  # Replace 'airflow-env' with your preferred name for the virtual environment
+python3 -m venv airflow-env  
 source airflow-env/bin/activate
 ```
 
-### 3. Making Connection to MySQL Running in Windows from WSL
-
-#### 3.1 MySQL Client in WSL
+### 2. Install required dependencies within the Virtual Environment
 
 ```sh
-sudo apt install mysql-client-core-8.0
+pip install -r requirements.txt
 ```
 
-#### 3.2 Find IPv4 Address of WSL
+### 3. Set AIRFLOW_HOME 
+Before installing Airflow, you can optionally set up `AIRFLOW_HOME`. If not set, the default will be `~/airflow` (e.g., `/home/user/airflow`).
 
-Go to Settings -> Network and Internet -> Status -> View Hardware and connection properties. Look for the name `vEthernet (WSL)`. It will usually be at the bottom.
+Open your  `.zshrc` file for MacOS or `.bashrc` for Linux using the vim or any other text editor:
 
-#### 3.3 Making New User in MySQL to Make a Call from WSL
-
-```sql
-CREATE USER 'wsl_root'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'wsl_root'@'localhost' WITH GRANT OPTION;
-CREATE USER 'wsl_root'@'%' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON *.* TO 'wsl_root'@'%' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
+```zsh
+vim ~/.zshrc
 ```
 
-#### 3.4 Install PyMySQL
+Add the following lines to the file:
 
-```sh
-pip install PyMySQL==1.1.1
+```zsh
+export AIRFLOW_HOME=<PATH-OF-YOUR-DIRECTORY>
 ```
 
-#### 3.5 Initializing Database
+Save and exit the editor. Then, apply the changes:
 
-Edit the Airflow configuration file to connect to the MySQL database. Change the value of `sql_alchemy_conn` in `airflow.cfg`:
-
-```cfg
-sql_alchemy_conn = mysql+pymysql://wsl_root:password@my_ip/my_database_name
+```zsh
+source ~/.zshrc
 ```
 
-Replace `my_ip` with your WSL IP address.
-Replace `my_database_name` with your database_name.
+Verify the environment variable:
 
-### 4. Install Apache Airflow within the Virtual Environment
-
-```sh
-pip install apache-airflow
+```zsh
+echo $AIRFLOW_HOME
 ```
 
-### 5. Initializing the Database
+### 4. Initializing the Database
 
 ```sh
 airflow db init
 ```
 
-### 6. Create an Airflow User with Administrative Privileges
+### 5. Create an Airflow User with Administrative Privileges
 
 ```sh
 airflow users create --username admin --password admin --firstname admin --lastname admin --role Admin --email admin@email.com
@@ -115,10 +63,36 @@ Verify the created user:
 airflow users list
 ```
 
-### 7. Running Airflow Webserver and Scheduler
+### 6. Optionally make changes to airflow.cfg
+
+Set 
+```plaintext 
+load_examples = False
+```
+
+in airflow.cfg after intializing the database.
+
+### 7. Make changes to .env file according to your MySQL credentials and your project path. 
+
+```
+SQL_USERNAME = 
+SQL_PASSWORD = 
+SQL_HOST = 
+SQL_PORT = 
+ROOT_PATH = 
+DATABASE_NAME = "entity_matching"
+```
+
+Create a database named "entity_matching" in MySQL Server.
+
+### 8. Running Airflow Webserver and Scheduler
 
 ```sh
-airflow webserver --port 8080 & airflow scheduler
+airflow webserver --port 8080 
+```
+
+```sh
+airflow scheduler
 ```
 
 ---
